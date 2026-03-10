@@ -1,24 +1,65 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title> Cadastro de Clientes</title>
-    <body>
-        <form id="formCadastro">
-            <div>
-                <div> 
-                    <label>Nome:</label>
-                    <input type="text" name="nome" required>
-                </div>
-            </div>      
-            <div> 
+    <html lang="pt-br">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Hotel</title>
+        </head>
+        <body>
+            <nav>
+
                 <div>
-                   <label>CPF:</label>
-                   <input type="text" name="nome" required>
+                  <a href="/"> Hotel </a>
+                  <button type="button">
+                  <span></span>
+                </button>
+                <div id="narvbarNav">
+                <ul>
+                    <li> 
+                      <a href="/"> Cadastro</a>
+               </li>
+               <li> 
+                <a href="/cosulta"> Consultar</a>
+               </li>
+            </ul>
+        </div>
+            <form id="Cadastroformulario">
+                
+                <div>
+                    <div>
+                        
+                        <label> Nome</label>
+                        <input type="text" name="nome" required>
+                    </div>
                 </div>
-             </div>
-         </form>
-      </body>
-    </head>
-</html>
+                <div>
+                    <div>
+                        <label> CPF</label>
+                        <input type="text" name="CPF" required>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label> Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label> Telefone</label>
+                        <input type="text" name="Telefone" required>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                    
+                        <label>
+                            Observações: 
+                        </label>
+                        <textarea="text" name="Observações" required>
+                    </div>
+                </div>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </body>
+    </html>
