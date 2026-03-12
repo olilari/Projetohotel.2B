@@ -6,8 +6,7 @@ from datetime import (
 )
 app = Flask(__name__)
 
-# Caminho base do projeto (uma pastacina do beckend)
-#BASE_DIR = os.path.asbpath(os.path.join(os.path.dirname(__file__), '..'))
+
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 
@@ -18,7 +17,7 @@ FRONTEND_DIR = os.path.join(BASE_DIR, "FrontEnd")
 STATIC_DIR= os.path.join(BASE_DIR, "static")
 
 DB_DIR = os.path.join (os.path.dirname(__file__), "..", "db")
-EXCEL_FILE = os.path.join (DB_DIR, "cliente.xlsx")
+EXCEL_FILE = os.path.join (DB_DIR, "clientes.xlsx")
 
 COLUMNS = [
    "ID",
@@ -27,10 +26,22 @@ COLUMNS = [
    "Email",
    "Telefone",
    "Endereço",
-   "Observação",
+   "Observações",
    "Data Cadastro"
 
 ]
+
+def init_excel():
+   if not os.path.exists(DB_DIR):
+      os.makedirs(DB_DIR)
+
+
+   if not os.path.exists(EXCEL_FILE):
+      workbook = openpyxl.Workbook()
+      sheet = workbook.active
+      sheet.title = "Clientes"
+      sheet.append(COLUMNS)
+      workbook.save(EXCEL_FILE)
 
 
 app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/" + STATIC_DIR)
@@ -52,4 +63,5 @@ if __name__ == "__main__":
     print("BASE_DIR", BASE_DIR)
     print("FRONTEND_DIR", FRONTEND_DIR)
     print("STATIC_DIR", STATIC_DIR)
+    init_excel()
     app.run(debug=True)
