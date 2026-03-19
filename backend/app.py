@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, jsonify, request, field
 import openpyxl
 from datetime import (
    datetime,
@@ -71,7 +71,7 @@ def cadastrar_cliente():
 
 
       required_fields = ["nome", "cpf", "email", "telefone", "endereço"]
-      if not all(field in data and data[field] in required_field):
+      if not all(field in data and data[field] in required_fields):
          return(
             jsonify(
                {
@@ -88,6 +88,41 @@ def cadastrar_cliente():
       if sheet.max_row > 1:
          last_id = sheet.cell(row=sheet.max_row, column=1).value or 0 
          new_id = last_id + 1 
+
+
+      novo_cliente = [
+         new_id,
+         data.get("nome"),
+         data.get("cpf"),
+         data.get("email"),
+         data.get("telefone"),
+         data.get("endereço"),
+         data.get("observação", ""),
+         datetime.now().strftime("%Y-%m-%d"),
+      ]
+ 
+      sheet.append(novo_cliente)
+      workbook.save(EXCEL_FILE)
+
+
+      return (
+         jsonify(
+            {
+               "status": "sucess",
+               "message": "Cliente cadastrado com sucesso!",
+               "id": new_id,
+
+            }
+         ),
+         201,
+      )
+   except Exception as e:
+
+      return (
+         jsonify({"status": "error", "message": f"Erro ao salvar no servidor: {e}"}),
+         500,
+      )
+
 
 if __name__ == "__main__":
     print("BASE_DIR", BASE_DIR)
