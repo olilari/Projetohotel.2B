@@ -3,26 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONSULTA</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Consultar - Hotel RS</title>
 </head>
 <body>
-    <nav>
-        <div>
-            <a href="/"> Hotel </a>
-            <button type="button">
-                <span></span>
-            </button>
-            <div id="narvbarNav">
-                <ul>
-                    <li>
-                        <a href="/"> Cadastro</a>
-                    </li>
-                    <li>
-                        <a href="/alterar">Alterar</a>
-                    </li>
-                </ul>
+    <div class="container">
+        
+        <nav>
+            <div class="cabecalho">
+                <a href="/" class="titulo_nav">🏨 Hotel RS</a>
+                <!-- <button type="button">
+                    <span></span>
+                </button> -->
+                <div id="navbarNav">
+                    <ul>
+                        <li>
+                            <a href="/">🏠 Cadastro</a>
+                        </li>
+                        <li>
+                            <a href="/consulta">🔍 Consultar</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-    </nav>
-    <h1>PAGINA DE CONSULTA</h1>
+        </nav>
+
+        <div class="consulta">
+            <div class="consultaForm">
+                <h2>🔍 Consulta de Clientes</h2>
+
+                <!-- Campo de busca com botão -->
+                <div class="areaBusca">
+                    <input type="text" id="campoBusca" placeholder="Digite o nome do cliente">
+                    <button id="btnBuscar" class="btnBuscar">Buscar</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <!-- 💡 O corpo da tabela será preenchido dinamicamente via JS -->
+                    <tbody id="tabelaResultados"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Todos os direitos reservados. Desenvolvido por <a href="https://github.com/kauasanches" target="_blank">Kauã Sanches</a></p>
+    </footer>
+
+    <script src="./assets/js/main.js"></script>
 </body>
 </html>

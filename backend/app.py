@@ -22,7 +22,7 @@ JS_DIR = os.path.join(BASE_DIR, "frontend", "js")
 JS_FILE = os.path.join(JS_DIR, "main.js")
 
 # Cabecalhos das colunas do Excel (linha 1)
-COLUNAS = [
+COLUMNS = [
     "ID",
     "Nome",
     "CPF",
@@ -41,10 +41,10 @@ def init_excel():
         workbook = openpyxl.Workbook() # Cria a planilha
         sheet = workbook.active # Pega a planilha ativa
         sheet.title = "Clientes" # Nomeia a aba principal
-        sheet.append(COLUNAS) # Adiciona os títulos das colunas
+        sheet.append(COLUMNS) # Adiciona os títulos das colunas
         workbook.save(EXCEL_FILE) # Salva o arquivo Excel
 
-app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/static")
+app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/" + STATIC_DIR)
 
 # Pagina principal
 @app.route("/")
@@ -55,7 +55,7 @@ def home():
 # Pagina de consulta
 @app.route("/consulta")
 def consulta_page():
-    return send_from_directory(FRONTEND_DIR, "consultar.html")
+    return send_from_directory(FRONTEND_DIR, "consulta.html")
 
 # Pagina de alteracao
 @app.route("/alterar")
@@ -131,6 +131,64 @@ def cadastrar_cliente():
             jsonify ({"status": "error", "message": f"Erro ao salvar no servidor: {e}"}),
             500,
         )
+
+@app.route("/buscar", methods={"GET"})
+def buscar_clientes():
+
+    nome_query = request.args.get("nome", "").lower()
+
+
+    try:
+        workbook = openpyxl.load_workbook(EXCEL_FILE)
+        sheet =  workbook.active
+        resultados = []
+
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            cliente = dict(zip(COLUMNS,row))
+            nome_cliente = (cliente.get("Nome") or ""). lower()
+
+            if nome_query in nome_cliente:
+                resultados.append(cliente)
+
+        return jsonify(resultados)
+    
+    except FileNotFoundError:
+        return (
+            jsonify({"status": "error", "message": "Arquivo de dados não encontrado."}),
+            404,
+        )
+    except Exception as e:
+        return (
+            jsonify({"status": "error", "message": f"Erro ao ler os dados: {e}"}),
+            500,
+        )
+    
+
+@app.route("/cliente/<int:cliente_id>", methods=["GET"])
+def get_cliente(cliente_id):
+
+
+    try: 
+        workbook = openpyxl.load_workbook(EXCEL_FILE)
+        sheet = workbook.active
+
+        #procura do cliente linha por linha 
+        for row_idx in range(2, sheet.max_row + 1):
+            row_idx = sheet.cell(row=row_idx, column=1).value
+            if row_idx == cliente_id:
+                row_values = [cell.value for cell in sheet[row_idx]]
+                cliente = dict(zip(COLUMNS, row_values))
+                return jsonify(cliente)
+            
+            #Se não encontrar o ID
+            return jsonify({"status": "error", "message": "Cliente não encontrado."}), 404
+    except Exception as e:
+        return (
+            jsonify({"status": "error", "message": f"Erro ao buscar cliente: {e}"}),
+            500,
+        )
+
+
 
 if __name__ == "__main__":
     print("Base: ", BASE_DIR)

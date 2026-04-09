@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 
-    const formCadastro = document.getElementById("formCadastro");
+    const formCadastro = document.getElementById("CadastroFormulario");
 
     if (formCadastro) {
 
