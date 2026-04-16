@@ -187,7 +187,56 @@ def get_cliente(cliente_id):
             jsonify({"status": "error", "message": f"Erro ao buscar cliente: {e}"}),
             500,
         )
+ 
+@app.route("/api/atualizar/int:cliente_id>", methods=["POST"])
+def atualizar_cliente(cliente_id):
 
+
+    try:
+        data = request.json
+        workbook = openpyxl.load_workbook(EXCEL_FILE)
+        sheet = workbook.active
+
+
+        row_to_update = -1
+
+
+        for row_idx in range(2, sheet.max_row + 1):
+            if sheet.cell(row=row_idx, column=1).value == cliente_id:
+                row_to_update = row_idx
+                break
+
+            if row_to_update == -1:
+                return(
+                    jsonify({
+                        "status": "error",
+                        "message": "Cliente não encontrado para atualização", 
+
+                    }),
+                    404,
+                )
+
+        sheet.cell(row=row_to_update, column=2, value=data.get("nome"))
+        sheet.cell(row=row_to_update, column=3, value=data.get("cpf"))
+        sheet.cell(row=row_to_update, column=4, value=data.get("email"))  
+        sheet.cell(row=row_to_update, column=5, value=data.get("telefone"))
+        sheet.cell(row=row_to_update, column=6, value=data.get("endereço"))
+        sheet.cell(row=row_to_update, column=7, value=data.get("observações"))
+
+        workbook.save(EXCEL_FILE)
+
+        return jsonify({
+            "status": "success",
+            "message": "Dados do cliente atuluzados com sucesso!",
+        })
+    
+    except Exception as e:
+
+
+        return (
+            jsonify({"status": "error", "message": f"Error ao atulizar dados {e}"}),
+            500,
+        )
 
 
 if __name__ == "__main__":
